@@ -1,0 +1,238 @@
+=== REVIEW PACK: LOW-POLY ANIME CHARACTER (made with Claude in Blender) ===
+Please review this 3D model work. Everything below is plain text so it can be pasted without attachments.
+If you can open web links, the GitHub repo with all the renders is: https://github.com/bv8dpwfzrj-sudo/lowpoly-anime-character
+Images are in the images/ folder of that repo; lowpoly_character.obj is the full mesh as text;
+scripts/ holds the Python that builds the model.
+
+WHAT IT IS
+- Original low-poly (PS1-style) anime schoolgirl: navy bob with bangs, long front locks, ahoge and gold clip;
+  cream sailor blouse, teal collar, red ribbon, teal pleated skirt, knee socks, brown loafers.
+- 894 triangles total (brief: 512-1024, everything counted, no subdivision/hidden geometry).
+- Flat shading, one 512x512 hand-painted atlas with nearest-neighbour sampling, Blender 5.3 / Eevee.
+- Built vertex by vertex from Python (bmesh); the head is 11 hand-placed 12-vertex rings.
+- Head/chin/jaw were the top priority of the brief: projecting chin, defined jaw, jaw-to-neck transition,
+  angular cheeks, readable side profile.
+
+WHAT THE RENDERS SHOW (for a reader who cannot see the images)
+- turnaround.jpg: front / side / rear / 3/4 full body, textured, plus head close-ups, a grey clay head and a
+  black silhouette head.
+- head_gate.jpg: head with hair and clothes hidden - grey clay front, side, 3/4, rear 3/4, underside, and black
+  side + 3/4 silhouettes. Used to check that the chin and jaw read from geometry alone.
+- turntable.gif: 72-frame seamless 360-degree spin, full body on the left, head close-up on the right.
+
+COORDINATES USED BELOW
+- Ring table: head frame in cm, menton (bottom of chin) at z=0, f = forward depth (ear axis ~ f=0),
+  x = half width. Each ring lists P0 front-centre ... P6 back-centre; it is mirrored to 12 vertices.
+  The head is then scaled by 1.08 and moved up to z=131.5 cm.
+- OBJ file: world space, cm, Z up, character faces -Y.
+
+QUESTIONS FOR THE REVIEWER
+1. Does the chin/jaw/neck construction read correctly from the side and 3/4, given the numbers below?
+2. Is the 894-triangle budget split sensibly (hair 33%, head 28%)?
+3. What would you change first to make it look more like a polished PS1-era anime character?
+
+
+=== HEAD RING TABLE (from scripts/build_character.py) ===
+RINGS = [
+    ("R1 crown",      [(0, 4.4, 20.8), (2.7, 3.8, 20.9), (4.7, 1.8, 21.0), (5.4, -1.0, 21.0), (4.7, -4.0, 20.9), (2.7, -6.0, 20.7), (0, -6.6, 20.6)]),
+    ("R2 forehead",   [(0, 7.0, 17.6), (3.7, 6.2, 17.7), (6.3, 3.4, 17.8), (7.2, -0.8, 17.9), (6.6, -5.0, 17.8), (3.9, -7.8, 17.6), (0, -8.4, 17.5)]),
+    ("R3 brow",       [(0, 7.9, 13.0), (3.6, 7.6, 13.0), (6.6, 4.6, 13.0), (7.4, -0.8, 13.0), (7.0, -5.2, 13.0), (4.2, -8.1, 13.0), (0, -8.6, 13.0)]),
+    ("R4 eyes",       [(0, 7.7, 9.6), (3.4, 7.0, 9.8), (6.3, 4.9, 9.8), (7.0, 0.0, 9.8), (6.8, -4.8, 9.8), (4.0, -7.7, 9.6), (0, -8.1, 9.6)]),
+    ("R5 nose/zyg",   [(0, 8.9, 6.3), (3.0, 7.2, 6.5), (5.8, 4.7, 6.8), (6.5, 0.2, 6.6), (6.2, -4.4, 6.6), (3.8, -7.0, 6.4), (0, -7.4, 6.2)]),
+    ("R6 mouth",      [(0, 7.9, 3.8), (2.4, 7.1, 4.0), (4.8, 4.6, 4.6), (5.7, 0.5, 4.8), (5.3, -3.6, 4.9), (3.5, -6.2, 4.6), (0, -6.7, 4.5)]),
+    ("R7a sulcus",    [(0, 8.05, 2.6), (2.0, 7.4, 2.85), (4.4, 4.7, 3.6), (5.5, 0.45, 4.15), (5.0, -3.3, 4.25), (3.3, -5.9, 3.9), (0, -6.3, 3.8)]),
+    ("R7 chin/gonion",[(0, 8.8, 1.3), (1.7, 8.1, 1.55), (3.9, 5.0, 2.45), (5.3, 0.4, 3.5), (4.7, -3.1, 3.6), (3.1, -5.6, 3.25), (0, -6.0, 3.1)]),
+    ("R8 jaw border", [(0, 7.7, 0.0), (1.5, 7.2, 0.2), (3.2, 4.2, 1.1), (4.0, 0.6, 1.9), (4.1, -3.0, 2.6), (3.0, -5.2, 2.5), (0, -5.7, 2.4)]),
+    ("N1 throat",     [(0, 2.8, -1.2), (2.0, 2.3, -1.0), (3.4, 0.7, -0.6), (3.8, -1.2, 0.0), (3.4, -3.4, 0.8), (2.2, -4.8, 1.4), (0, -5.2, 1.6)]),
+    ("N2 neck base",  [(0, 2.6, -6.5), (2.2, 2.0, -6.5), (3.6, 0.3, -6.5), (4.0, -1.4, -6.5), (3.6, -3.4, -6.5), (2.3, -4.6, -6.5), (0, -5.0, -6.5)]),
+]
+
+=== STATS (read from the saved .blend) ===
+LOW-POLY ANIME CHARACTER - STATISTICS
+====================================================
+Blender version      : 5.3.0
+File                 : LOWPOLY_CHARACTER.blend
+
+TOTAL TRIANGLES      : 894   (budget 512 - 1024: PASS)
+TOTAL VERTICES       : 596
+TOTAL FACES (polys)  : 528   (quads + tris + 2 n-gons; triangles above = triangulated count)
+Modifiers in file    : none (no subdivision, no mirror, no decimate)
+Mesh objects         : 13   (every mesh object in the file is counted)
+
+Triangles per collection (component group):
+  Accessories      8  (0.9%)
+  Body           168  (18.8%)
+  Clothing       172  (19.2%)
+  Hair           294  (32.9%)
+  Head           252  (28.2%)
+
+collection   object            tris  verts  faces
+Accessories  Hair_Clip            4      5      4
+Accessories  Ribbon               4      9      4
+Body         Arm_L               48     34     31
+Body         Arm_R               48     34     31
+Body         Leg_L               36     24     18
+Body         Leg_R               36     24     18
+Clothing     Sailor_Collar       14     15     14
+Clothing     Shoe_L              16     12      7
+Clothing     Shoe_R              16     12      7
+Clothing     Skirt               24     24     24
+Clothing     Torso_Blouse       102     56     49
+Hair         Hair               294    214    189
+Head         Head               252    133    132
+
+Head mid-sagittal profile vertices (z up from ground, forward depth from ear axis), cm:
+  z= 153.96  forward=  4.75
+  z= 150.51  forward=  7.56
+  z= 145.54  forward=  8.53
+  z= 141.87  forward=  8.32
+  z= 138.30  forward=  9.61
+  z= 135.60  forward=  8.53
+  z= 134.31  forward=  8.69
+  z= 132.90  forward=  9.50
+  z= 131.50  forward=  8.32
+  z= 130.20  forward=  3.02
+  z= 124.48  forward=  2.81
+
+Texture              : 1 x 512x512 hand-painted atlas, packed into the .blend, nearest-neighbour sampling
+Material             : 1 (LowPoly_Atlas: image -> diffuse + 0.42 emission, flat-shaded faces)
+Modeling approach    : procedural vertex-by-vertex construction in Python (bmesh): 12-vertex head ring
+                       loops incl. a tilted jaw-border loop, 8-vertex torso rings, 6-vertex limb rings,
+                       zig-zag pleated skirt, hair = low cap + 24 triangular-section clumps.
+                       No subdivision, no decimation, no sculpting. Scripts: LowPolyCharacter/scripts/
+
+=== HEAD INSPECTION LOG (qc/head_inspection.md) ===
+```
+HEAD: LowPoly anime girl (Head object, 252 tris)   STYLE: anime / low-poly   BUILD: final   DATE: 2026-11-12
+Evidence: qc/head_gate_sheet.png (no hair/clothes, clay + black silhouettes), qc/head_clay_sheet.png,
+          qc/head_tex_sheet.png, qc/full_tex_sheet.png, LOWPOLY_CHARACTER_STATS.txt (profile vertices)
+
+SIDE ORTHO
+[x] profile chain complete (nose tip > mouth plane > 3 mm sulcus > chin > menton > underside > throat > neck)
+[x] chin is the most forward point of the lower face (0.97 cm ahead of the mouth plane)
+[x] groove depth within anime budget (3 mm); no lips modelled, mouth painted
+[x] cervicomental angle 106 deg (target 100-120); neck behind and below the jaw
+FRONT 3/4
+[x] jawline = one loop (R8) from below the ear to the chin; reads as one edge in clay and in the 3/4 silhouette
+[x] cheek-to-jaw transition is a facet/plane change (cheekbone vertex R5 P2 -> jaw side faces), no carved crease
+[x] chin shows volume: front facet + two side facets + underside
+[~] mouth "barrel": present as the R6 front facets; mouth itself painted (acceptable for low-poly anime)
+REAR 3/4
+[x] jaw angle readable past the neck (head_nohair_clay_rq34); with hair, side clumps stop above the jaw angle
+[x] no lumps under the ear
+SILHOUETTES (side + 3/4, no hair)
+[x] chin, dent and throat readable in flat black
+UNDERSIDE
+[x] jaw underside plane present (R8 -> N1 faces); no keel, no hole; neck column behind
+SECTIONS
+[~] SDF cross-section tool not applicable to a hand-placed mesh; ring tables give the sections directly
+    (12-vertex rings: front facet widths 3.4 cm at the chin, 4.8 cm at the mouth)
+FULL BODY (front, side, rear, 3/4, above, below - textured)
+[x] hairstyle silhouette holds from every angle; long locks pass >= 2.5 cm outside the jaw
+[x] lower face does not collapse into the neck in the "above" view; jaw underside visible in the "below" view
+RESULT: PASS  (waivers: painted mouth / no lips -> E-line 10 mm, above the anime 2-8 mm target)
+```
+
+=== MODELING NOTES (MODELING_NOTES.md) ===
+# Low-Poly Anime Character - Modeling Notes
+
+**Result:** an original low-poly anime schoolgirl. She has navy bob hair with long front locks, an ahoge and a gold clip, a cream sailor blouse with a teal collar and red ribbon, a teal pleated skirt, knee socks and loafers.
+
+* **Triangles:** **894** in total (budget 512-1024), counted from the saved `.blend`'s triangulated meshes. That covers every mesh object; there are no modifiers.
+* **Texture and shading:** one 512 px hand-painted atlas with nearest-neighbour sampling, flat shading, rendered in Eevee.
+* **Source of truth:** everything is generated by the scripts in `scripts/`. `build_character.py` is the model, and the `.blend` file can be edited directly.
+
+## 1. Reference study
+* **Reference ZIP:** full-body front and rear, a rotating turnaround, a face close-up and expression sheets. The style traits I took from it:
+  * visible triangles with mostly flat shading;
+  * hand-painted, slightly pixelated textures that carry the eyes, folds and pattern;
+  * hair made of separate spiky low-poly clumps, with a few protruding spikes that break the silhouette;
+  * a simple faceted face whose expression lives in the texture;
+  * clothing silhouettes with flared, angular shapes (bell sleeves, flared trousers);
+  * 6-6.5 heads tall.
+* **Evanciao video:** I could not watch it from this environment; only its title page loads. Its techniques were therefore inferred from the reference images and general low-poly practice:
+  * block the proportions in ortho views;
+  * use flat shading;
+  * hand-paint one texture atlas;
+  * build hair as clumps.
+
+  The character, palette, hairstyle and outfit are original. There are no cat-ear tufts, purple bell-sleeve top or flared trousers from the reference.
+
+## 2. Triangle budget allocation (actual)
+| Group | Triangles | Share | Objects |
+|---|---|---|---|
+| Hair | 294 | 33% | cap 84 + 24 clumps (7 bangs, 4 side, 2 long locks, 7 back, 3 crown spikes, ahoge) |
+| Head + neck | 252 | 28% | 11 rings x 12 verts + crown fan |
+| Clothing | 172 | 19% | blouse/torso 102, sailor collar 14, skirt 24, shoes 2 x 16 |
+| Body | 168 | 19% | arms + hands 2 x 48, legs 2 x 36 |
+| Accessories | 8 | 1% | ribbon 4, hair clip 4 |
+| **Total** | **894** | | 130 spare triangles left in the budget |
+
+The head and hair get 61% of the budget on purpose. The face and hair carry the "anime" read, while the limbs read fine as 6-sided prisms.
+
+## 3. How the chin was constructed
+* **Head rings:** the head is 11 stacked loops of 12 vertices each: crown, forehead, brow, eyes, nose/cheekbone, mouth, sulcus, chin, jaw border, throat, neck. Every vertex is placed by hand from a profile table in `build_character.py` (section `RINGS`). This follows the plane-based recipe in `HEAD_MODELING_GUIDE.md` §5.
+* **Tilted loops:** below the mouth the loops are lower at the front and higher at the back. This turns one loop, `R8 jaw border`, into the jawline itself, running from the menton up to the jaw angle under the ear. The face's side plane sits above that loop; the jaw's underside plane sits between it and the throat loop `N1`, and the neck column (`N1` to `N2`) starts behind it.
+* **Chin projection:** the chin loop's front vertex sits **0.97 cm ahead of the mouth plane**. The anime target is 0.8-1.8 cm.
+* **Labiomental dent:** a dedicated ring, `R7a`, makes a 3 mm dent between the lips and the chin, so the transition reads but isn't a trench (anime budget 1-3 mm).
+* **Measured from the saved mesh** (`LOWPOLY_CHARACTER_STATS.txt`, head scaled 1.08):
+  * cervicomental angle **106 degrees** (target 100-120);
+  * lower third about 5.5 cm (target 5-6);
+  * labiomental angle about 157 degrees, which is very soft and typical of anime;
+  * lower lip about 10 mm behind the E-line. That is above the anime 2-8 mm target, because the low-poly face has no modeled lips: the mouth is painted.
+* **Gate checks:** the chin passes the gate with the hair and clothing hidden (`qc/head_gate_sheet.png`):
+  * the black side silhouette shows forehead, nose, mouth, chin, underside and throat;
+  * the 3/4 silhouette shows the chin and jaw standing clear of the neck;
+  * the underside views show the jaw floor, with the neck behind it.
+* **No painted chin:** the chin has no painted shadow. Only the neck below the jaw has a light cel-shade band, and the geometry already shows the underside without it.
+
+## 4. What worked
+* **Ring tables:** writing each head ring as a half-profile table (P0 front centre to P6 back centre, then mirrored) made the face a deliberate design, not a deformed sphere. Planes (forehead, eye plane, cheekbone, mouth front, chin front, jaw side, jaw underside) are visible facets in clay renders.
+* **Tilted jaw loop:** this solves the classic low-poly problem where horizontal rings can't follow a diagonal jawline. The loop *is* the jawline.
+* **Triangular hair clumps:** clumps with a triangular cross-section (two inner edges plus an outer ridge) and 2-3 sections each give angular highlights and shadows for free under flat shading. They cost 9-15 triangles per clump.
+* **Hair cap:** a low cap under the clumps, ending at the hairline at the front and tucked onto the skin at the sides and back, so no skull shows between clumps.
+* **Atlas:** one atlas with a fixed region layout (face front projection, hair/torso/skirt cylinders, leg/arm strips, 32 px colour swatches). Texture details (eyes, blush, folds, pleat lines, sock tops, cuffs) cost zero triangles.
+* **Inspection:** the fixed inspection cameras (front, side, rear, 3/4, rear 3/4, above, below, underside), in clay, textured and silhouette, caught every real problem below.
+
+## 5. Problems encountered (and fixes)
+| Problem | Seen in | Fix |
+|---|---|---|
+| Hair cap edge made a "tiara" line across the forehead at brow level | first head clay/textured views | front part of the cap now ends at the hairline; bangs hang from there |
+| Bangs too short/thin, hair silhouette a narrow helmet | first full view | bangs longer, wider and thicker; side/back clumps pushed out 2-3.6 cm; bigger crown spikes |
+| Some clump faces had flipped normals (dark facets) | clay "above" view | orientation reference changed from the path point (which lies on the clump's inner face) to the cross-section centroid |
+| Ahoge tip rendered magenta | textured close-up | UV v hit exactly 1.0 and wrapped to an unused atlas area; v is clamped and the texture extension set to EXTEND |
+| Cream patch on the middle of the back | rear view | faces straddling the cylinder seam (u 0/1) had their u **averaged to 0.5 = the front texture**; they are now unwrapped to the high side instead |
+| Back of the sailor collar hidden inside the torso | rear view | larger offsets and a mid-back vertex so the flap follows the curved back (+2 triangles) |
+| Boxy "shoulder pad" arms; long neck; small head | full views | lower/smaller shoulder cap; head lowered 1 cm and scaled 1.08 (anime head-to-body ratio) |
+| Two arm/leg/shoe copies missing from the first build | stats | all parts registered in an explicit list (no garbage-collector lookups) |
+| Thumb face rejected (duplicate face) | build log | thumb rebuilt as a 3-triangle tetrahedron |
+
+## 6. Limitations (honest)
+* **No rig:** no armature or weights are included. The deliverables didn't require one, and the triangle budget doesn't change with rigging. The ring topology (6-12 vertex loops at elbows, knees, neck) is placed so a simple armature with automatic weights would bend acceptably.
+* **Fixed expression:** the expression is painted (one face). Expression swaps would need extra face textures or UV offsets.
+* **No lips:** the face has no modeled lips, so the E-line metric is above the anime target (see §3).
+* **Reference video not watched:** see §1.
+
+## 7. Improvements to HEAD_MODELING_GUIDE.md
+I added a new **§13 "Low-poly / budgeted heads"** to the guide. It covers:
+* the ring-table head;
+* the tilted jaw-border loop;
+* budget shares;
+* the triangle-cost of each head ring;
+* which landmarks need their own vertices;
+* the hair cap/clump recipe;
+* texture-versus-geometry rules;
+* the low-poly version of the inspection gate (hair hidden, clay, silhouettes);
+* the two UV pitfalls found here.
+
+## 8. Files
+| File | What |
+|---|---|
+| `LOWPOLY_CHARACTER.blend` | editable model. Collections: Head, Hair, Body, Clothing, Accessories. One material, atlas packed. |
+| `LOWPOLY_CHARACTER.gif` | 72-frame seamless 360-degree turntable: full body plus head close-up, side by side |
+| `LOWPOLY_CHARACTER_TURNAROUND.png` | front / side / rear / 3/4, plus head close-ups, the clay geometry check and the silhouette |
+| `LOWPOLY_CHARACTER_STATS.txt` | triangle, vertex and face counts per object and group; head profile vertices |
+| `textures/atlas.png` | the hand-painted atlas (also packed in the .blend) |
+| `qc/` | every inspection render and sheet (`full_tex_sheet`, `head_clay_sheet`, `head_tex_sheet`, `head_gate_sheet`) |
+| `scripts/` | `paint_textures.py`, `build_character.py`, `inspect_views.py`, `render_turntable.py`, `make_gif.py`, `make_turnaround.py`, `stats.py`, `run_inspect.sh` |
+| `reference/` | contact sheets made from the supplied ZIP (the originals are in `reference_raw/`) |
